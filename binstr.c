@@ -3,8 +3,26 @@
 #include <string.h>
 #include "binstr.h"
 
+void str2bs(char *str, char *bitStr) {
+	int i;
+	for(i = 0; i < strlen(str); i++) {
+		char buffer[9] = "";
+		sprintf(buffer, 
+			"%c%c%c%c%c%c%c%c", 
+			(str[i] & 0x80) ? '1':'0', 
+			(str[i] & 0x40) ? '1':'0', 
+			(str[i] & 0x20) ? '1':'0', 
+			(str[i] & 0x10) ? '1':'0', 
+			(str[i] & 0x08) ? '1':'0', 
+			(str[i] & 0x04) ? '1':'0', 
+			(str[i] & 0x02) ? '1':'0', 
+			(str[i] & 0x01) ? '1':'0');
+		strncat(bitStr, buffer, 8);
+	}
+}
+
 unsigned char bs2uc(char *bitStr) {
-	assert(strlen(bitStr) <= 8);
+	assert(strlen(bitStr) <= (8*sizeof(char)));
 
 	unsigned char val = 0;
 	int toShift = 0;
@@ -12,7 +30,7 @@ unsigned char bs2uc(char *bitStr) {
 	int i;
 	for(i = strlen(bitStr)-1; i >= 0; i--) {
 		if(bitStr[i] == '1') {
-			val = 1 << toShift | val;
+			val = (1 << toShift) | val;
 		}
 		
 		toShift++;
@@ -22,25 +40,26 @@ unsigned char bs2uc(char *bitStr) {
 }
 
 char bs2c(char *bitStr) {
-	assert(strlen(bitStr) <= 8);
+	assert(strlen(bitStr) <= (8*sizeof(char)));
 
 	char val = 0;
 	int toShift = 0;
 
 	int i;
-	for(i = strlen(bitStr)-1; i >= 0; i--) {
+	for(i = strlen(bitStr)-1; i >= 1; i--) {
 		if(bitStr[i] == '1') {
-			val = 1 << toShift | val;
+			val = (1 << toShift) | val;
 		}
 		
 		toShift++;
 	}
+	val = (bitStr[0] << (8*sizeof(char)-1)) | val; /* Use MSB as sign bit */
 
 	return val;
 }
 
 unsigned short bs2ush(char *bitStr) {
-	assert(strlen(bitStr) <= 16);
+	assert(strlen(bitStr) <= (8*sizeof(short)));
 
 	unsigned short val = 0;
 	int toShift = 0;
@@ -48,7 +67,7 @@ unsigned short bs2ush(char *bitStr) {
 	int i;
 	for(i = strlen(bitStr)-1; i >= 0; i--) {
 		if(bitStr[i] == '1') {
-			val = 1 << toShift | val;
+			val = (1 << toShift) | val;
 		}
 		
 		toShift++;
@@ -58,25 +77,26 @@ unsigned short bs2ush(char *bitStr) {
 }
 
 short bs2sh(char *bitStr) {
-	assert(strlen(bitStr) <= 16);
+	assert(strlen(bitStr) <= (8*sizeof(short)));
 
 	short val = 0;
 	int toShift = 0;
 
 	int i;
-	for(i = strlen(bitStr)-1; i >= 0; i--) {
+	for(i = strlen(bitStr)-1; i >= 1; i--) {
 		if(bitStr[i] == '1') {
-			val = 1 << toShift | val;
+			val = (1 << toShift) | val;
 		}
 		
 		toShift++;
 	}
+	val = (bitStr[0] << (8*sizeof(short)-1)) | val; /* Use MSB as sign bit */
 
 	return val;
 }
 
 unsigned int bs2ui(char *bitStr) {
-	assert(strlen(bitStr) <= 32);
+	assert(strlen(bitStr) <= (8*sizeof(int)));
 
 	unsigned int val = 0;
 	int toShift = 0;
@@ -84,7 +104,7 @@ unsigned int bs2ui(char *bitStr) {
 	int i;
 	for(i = strlen(bitStr)-1; i >= 0; i--) {
 		if(bitStr[i] == '1') {
-			val = 1 << toShift | val;
+			val = (1 << toShift) | val;
 		}
 		
 		toShift++;
@@ -94,25 +114,26 @@ unsigned int bs2ui(char *bitStr) {
 }
 
 int bs2i(char *bitStr) {
-	assert(strlen(bitStr) <= 32);
+	assert(strlen(bitStr) <= (8*sizeof(int)));
 
 	int val = 0;
 	int toShift = 0;
 
 	int i;
-	for(i = strlen(bitStr)-1; i >= 0; i--) {
+	for(i = strlen(bitStr)-1; i >= 1; i--) {
 		if(bitStr[i] == '1') {
-			val = 1 << toShift | val;
+			val = (1 << toShift) | val;
 		}
 		
 		toShift++;
 	}
+	val = (bitStr[0] << (8*sizeof(int)-1)) | val; /* Use MSB as sign bit */
 
 	return val;
 }
 
 unsigned long long bs2ul(char *bitStr) {
-	assert(strlen(bitStr) <= 64);
+	assert(strlen(bitStr) <= (8*sizeof(long long)));
 
 	unsigned long long val = 0;
 	int toShift = 0;
@@ -120,7 +141,7 @@ unsigned long long bs2ul(char *bitStr) {
 	int i;
 	for(i = strlen(bitStr)-1; i >= 0; i--) {
 		if(bitStr[i] == '1') {
-			val = 1ll << toShift | val;
+			val = (1ll << toShift) | val;
 		}
 		
 		toShift++;
@@ -130,25 +151,26 @@ unsigned long long bs2ul(char *bitStr) {
 }
 
 long long bs2l(char *bitStr) {
-	assert(strlen(bitStr) <= 64);
+	assert(strlen(bitStr) <= (8*sizeof(long long)));
 
 	long long val = 0;
 	int toShift = 0;
 
 	int i;
-	for(i = strlen(bitStr)-1; i >= 0; i--) {
+	for(i = strlen(bitStr)-1; i >= 1; i--) {
 		if(bitStr[i] == '1') {
-			val = 1ll << toShift | val;
+			val = (1ll << toShift) | val;
 		}
 		
 		toShift++;
 	}
+	val = ((long long)bitStr[0] << (8*sizeof(long long)-1)) | val; /* Use MSB as sign bit */
 
 	return val;
 }
 
 float bs2f(char *bitStr) {
-	assert(strlen(bitStr) == 32);
+	assert(strlen(bitStr) == (8*sizeof(float)));
 
 	float val = 0.0;
 	int *ptr = (int *)(&val);
@@ -167,7 +189,7 @@ float bs2f(char *bitStr) {
 }
 
 double bs2d(char *bitStr) {
-	assert(strlen(bitStr) == 64);
+	assert(strlen(bitStr) == (8*sizeof(double)));
 
 	double val = 0.0;
 	long long *ptr = (long long *)(&val);

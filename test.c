@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <inttypes.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -6,7 +7,12 @@
 
 #define EPSILON 0.00001
 
-int main() {
+int main(void) {
+	char *str = "Hello, world";
+	char strBits[8192] = "";
+	str2bs(str, strBits);
+	printf("%d\t%s\n", strlen(strBits), strBits);
+
 	char *cStr = "10000000";
 	unsigned char bUChar = bs2uc(cStr);
 	assert(bUChar == 128);
@@ -30,6 +36,13 @@ int main() {
 	printf("%s == -200\n", iStr, bInt);
 	assert(bInt==-200);
 
+	char *lStr = "1111111111111111111111111111111111111111111111111111111111111111";
+	unsigned long long bULong = bs2ul(cStr);
+	printf("%llu\n", bULong);
+
+	long long bLong = bs2l(cStr);
+	printf("%lli\n", bLong);
+
 	char *fStr = "11000001010001001100110011001101";
 	float bFloat = bs2f(fStr);
 	printf("%f\n", bFloat);
@@ -39,6 +52,9 @@ int main() {
 	double bDouble = bs2d(dStr);
 	printf("%f\n", bDouble);
 	assert(fabs(bDouble - 12.3) < EPSILON);
+
+	char *failStr = "100000000101000100110011001100110011001100110011001100110011010";
+	double fDouble = bs2d(failStr);
 
 	return 0;
 }
