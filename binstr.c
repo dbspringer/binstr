@@ -170,7 +170,7 @@ long long bs2l(char *bitStr) {
 }
 
 float bs2f(char *bitStr) {
-	assert(strlen(bitStr) == (4*sizeof(float)));
+	assert(strlen(bitStr) == (8*sizeof(float)));
 
 	float val = 0.0;
 	int *ptr = (int *)(&val);
