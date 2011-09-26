@@ -3,10 +3,17 @@
 #include <string.h>
 #include "binstr.h"
 
-void str2bs(char *str, char *bitStr) {
-	int i;
-	for(i = 0; i < strlen(str); i++) {
-		char buffer[9] = "";
+/** 
+ * Reads in character (byte) array and returns string 
+ * representation of binary 
+ * 
+ * Note: if strlen() is used for strLen, function will 
+ * stop at first 0 ('\0) value
+ **/
+void str2bs(const char *str, size_t strLen, char *bitStr) {
+	size_t i;
+	char buffer[9] = "";
+	for(i = 0; i < strLen; i++) {
 		sprintf(buffer, 
 			"%c%c%c%c%c%c%c%c", 
 			(str[i] & 0x80) ? '1':'0', 
@@ -18,6 +25,7 @@ void str2bs(char *str, char *bitStr) {
 			(str[i] & 0x02) ? '1':'0', 
 			(str[i] & 0x01) ? '1':'0');
 		strncat(bitStr, buffer, 8);
+		buffer[0] = '\0';
 	}
 }
 

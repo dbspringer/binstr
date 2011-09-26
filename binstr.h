@@ -7,7 +7,7 @@
 #endif
 
 /* String to binary string conversions */
-void 			str2bs(char *str, char *bitStr);
+void 			str2bs(const char *str, size_t strLen, char *bitStr);
 
 /* Binary string to value conversions */
 unsigned char 		bs2uc(char *bitStr);
