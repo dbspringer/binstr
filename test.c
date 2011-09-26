@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <inttypes.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -8,9 +7,9 @@
 #define EPSILON 0.00001
 
 int main(void) {
-	char *str = "Hello, world";
+	char *str = "Hello, world!";
 	char strBits[8192] = "";
-	str2bs(str, strBits);
+	str2bs(str, 13, strBits);
 	printf("%d\t%s\n", strlen(strBits), strBits);
 
 	char *cStr = "10000000";
