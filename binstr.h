@@ -1,6 +1,11 @@
 #ifndef _BINSTR_H_
 #define _BINSTR_H_
 
+/* Substring macro for sub-sampling binary strings */
+#ifndef substr
+#define substr(dest, src, dest_size, startPos, strLen)	snprintf(dest, dest_size, "%.*s", strLen, src+startPos)
+#endif
+
 /* String to binary string conversions */
 void 			str2bs(char *str, char *bitStr);
 
