@@ -8,7 +8,7 @@
  * representation of binary 
  * 
  * Note: if strlen() is used for strLen, function will 
- * stop at first 0 ('\0) value
+ * stop at first 0 ('\0') value
  **/
 void str2bs(const char *str, size_t strLen, char *bitStr) {
 	size_t i;
