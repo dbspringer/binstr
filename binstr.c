@@ -12,167 +12,44 @@
  **/
 void str2bs(const char *str, size_t strLen, char *bitStr) {
 	size_t i;
-	char buffer[9] = "";
-	for(i = 0; i < strLen; i++) {
-		sprintf(buffer, 
-			"%c%c%c%c%c%c%c%c", 
-			(str[i] & 0x80) ? '1':'0', 
-			(str[i] & 0x40) ? '1':'0', 
-			(str[i] & 0x20) ? '1':'0', 
-			(str[i] & 0x10) ? '1':'0', 
-			(str[i] & 0x08) ? '1':'0', 
-			(str[i] & 0x04) ? '1':'0', 
-			(str[i] & 0x02) ? '1':'0', 
-			(str[i] & 0x01) ? '1':'0');
-		strncat(bitStr, buffer, 8);
-		buffer[0] = '\0';
+	while (strLen--) {
+		bitStr[0] = (*str & 0x80) ? '1': '0';
+		bitStr[1] = (*str & 0x40) ? '1': '0';
+		bitStr[2] = (*str & 0x20) ? '1': '0';
+		bitStr[3] = (*str & 0x10) ? '1': '0';
+		bitStr[4] = (*str & 0x08) ? '1': '0';
+		bitStr[5] = (*str & 0x04) ? '1': '0';
+		bitStr[6] = (*str & 0x02) ? '1': '0';
+		bitStr[7] = (*str & 0x01) ? '1': '0';
+	 
+		bitStr += 8;
+		str++;
 	}
+	*bitStr = 0;
 }
 
-unsigned char bs2uc(char *bitStr) {
-	assert(strlen(bitStr) <= (8*sizeof(char)));
-
-	unsigned char val = 0;
-	int toShift = 0;
-
-	int i;
-	for(i = strlen(bitStr)-1; i >= 0; i--) {
-		if(bitStr[i] == '1') {
-			val = (1 << toShift) | val;
-		}
-		
-		toShift++;
-	}
-
-	return val;
-}
-
-char bs2c(char *bitStr) {
-	assert(strlen(bitStr) <= (8*sizeof(char)));
-
-	char val = 0;
-	int toShift = 0;
-
-	int i;
-	for(i = strlen(bitStr)-1; i >= 1; i--) {
-		if(bitStr[i] == '1') {
-			val = (1 << toShift) | val;
-		}
-		
-		toShift++;
-	}
-	val = (bitStr[0] << (8*sizeof(char)-1)) | val; /* Use MSB as sign bit */
-
-	return val;
-}
-
-unsigned short bs2ush(char *bitStr) {
-	assert(strlen(bitStr) <= (8*sizeof(short)));
-
-	unsigned short val = 0;
-	int toShift = 0;
-
-	int i;
-	for(i = strlen(bitStr)-1; i >= 0; i--) {
-		if(bitStr[i] == '1') {
-			val = (1 << toShift) | val;
-		}
-		
-		toShift++;
-	}
-
-	return val;
-}
-
-short bs2sh(char *bitStr) {
-	assert(strlen(bitStr) <= (8*sizeof(short)));
-
-	short val = 0;
-	int toShift = 0;
-
-	int i;
-	for(i = strlen(bitStr)-1; i >= 1; i--) {
-		if(bitStr[i] == '1') {
-			val = (1 << toShift) | val;
-		}
-		
-		toShift++;
-	}
-	val = (bitStr[0] << (8*sizeof(short)-1)) | val; /* Use MSB as sign bit */
-
-	return val;
-}
-
-unsigned int bs2ui(char *bitStr) {
-	assert(strlen(bitStr) <= (8*sizeof(int)));
-
-	unsigned int val = 0;
-	int toShift = 0;
-
-	int i;
-	for(i = strlen(bitStr)-1; i >= 0; i--) {
-		if(bitStr[i] == '1') {
-			val = (1 << toShift) | val;
-		}
-		
-		toShift++;
-	}
-
-	return val;
-}
-
-int bs2i(char *bitStr) {
-	assert(strlen(bitStr) <= (8*sizeof(int)));
-
-	int val = 0;
-	int toShift = 0;
-
-	int i;
-	for(i = strlen(bitStr)-1; i >= 1; i--) {
-		if(bitStr[i] == '1') {
-			val = (1 << toShift) | val;
-		}
-		
-		toShift++;
-	}
-	val = (bitStr[0] << (8*sizeof(int)-1)) | val; /* Use MSB as sign bit */
-
-	return val;
-}
-
-unsigned long long bs2ul(char *bitStr) {
+unsigned long long bs2ui(char *bitStr) {
 	assert(strlen(bitStr) <= (8*sizeof(long long)));
 
 	unsigned long long val = 0;
-	int toShift = 0;
-
-	int i;
-	for(i = strlen(bitStr)-1; i >= 0; i--) {
-		if(bitStr[i] == '1') {
-			val = (1ll << toShift) | val;
-		}
-		
-		toShift++;
+	while (*bitStr) {
+		val = (val << 1) | (*bitStr & 1);
+		bitStr++;
 	}
-
+ 
 	return val;
 }
 
-long long bs2l(char *bitStr) {
-	assert(strlen(bitStr) <= (8*sizeof(long long)));
-
-	long long val = 0;
-	int toShift = 0;
-
-	int i;
-	for(i = strlen(bitStr)-1; i >= 1; i--) {
-		if(bitStr[i] == '1') {
-			val = (1ll << toShift) | val;
-		}
-		
-		toShift++;
+long long bs2i(char *bitStr) {
+	long long val = 0l;
+	int len = (((strlen(bitStr)-1)/8)+1)*8;
+	int msb = bitStr[0] == '1' ? 1 : 0;
+	bitStr++;
+	while (*bitStr) {
+		val = (val << 1) | (*bitStr & 1);
+		bitStr++;
 	}
-	val = ((long long)bitStr[0] << (8*sizeof(long long)-1)) | val; /* Use MSB as sign bit */
+	val = (msb << len-1) | val; /* Use MSB as sign bit */
 
 	return val;
 }
@@ -182,15 +59,9 @@ float bs2f(char *bitStr) {
 
 	float val = 0.0;
 	int *ptr = (int *)(&val);
-	int toShift = 0;
-
-	int i;
-	for(i = strlen(bitStr)-1; i >= 0; i--) {
-		if(bitStr[i] == '1') {
-			*ptr = 1 << toShift | *ptr;
-		}
-		
-		toShift++;
+	while (*bitStr) {
+		*ptr = (*ptr << 1) | (*bitStr & 1);
+		bitStr++;
 	}
 
 	return val;
@@ -201,15 +72,9 @@ double bs2d(char *bitStr) {
 
 	double val = 0.0;
 	long long *ptr = (long long *)(&val);
-	int toShift = 0;
-
-	int i;
-	for(i = strlen(bitStr)-1; i >= 0; i--) {
-		if(bitStr[i] == '1') {
-			*ptr = 1ll << toShift | *ptr;
-		}
-		
-		toShift++;
+	while (*bitStr) {
+		*ptr = (*ptr << 1) | (*bitStr & 1);
+		bitStr++;
 	}
 
 	return val;

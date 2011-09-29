@@ -13,20 +13,20 @@ int main(void) {
 	printf("%d\t%s\n", strlen(strBits), strBits);
 
 	char *cStr = "10000000";
-	unsigned char bUChar = bs2uc(cStr);
+	unsigned char bUChar = bs2ui(cStr);
 	assert(bUChar == 128);
 	printf("%s == 128\n", cStr, bUChar);
 
-	char bChar = bs2c(cStr);
+	char bChar = bs2i(cStr);
 	assert(bChar == -128);
 	printf("%s == -128\n", cStr, bChar);
 
 	char *sStr = "1111111100111000";
-	unsigned short bUShort = bs2ush(sStr);
+	unsigned short bUShort = bs2ui(sStr);
 	assert(bUShort == 65336);
 	printf("%s == 65336\n", sStr, bUShort);
 	
-	short bShort = bs2sh(sStr);
+	short bShort = bs2i(sStr);
 	assert(bShort == -200);
 	printf("%s == -200\n", sStr, bShort);
 
@@ -36,10 +36,10 @@ int main(void) {
 	assert(bInt==-200);
 
 	char *lStr = "1111111111111111111111111111111111111111111111111111111111111111";
-	unsigned long long bULong = bs2ul(cStr);
+	unsigned long long bULong = bs2ui(cStr);
 	printf("%llu\n", bULong);
 
-	long long bLong = bs2l(cStr);
+	long long bLong = bs2i(cStr);
 	printf("%lli\n", bLong);
 
 	char *fStr = "11000001010001001100110011001101";
