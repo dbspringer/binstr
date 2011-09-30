@@ -15,31 +15,35 @@ int main(void) {
 	char *cStr = "10000000";
 	unsigned char bUChar = bs2ui(cStr);
 	assert(bUChar == 128);
-	printf("%s == 128\n", cStr, bUChar);
+	printf("%s == %d\n", cStr, bUChar);
 
 	char bChar = bs2i(cStr);
 	assert(bChar == -128);
-	printf("%s == -128\n", cStr, bChar);
+	printf("%s == %d\n", cStr, bChar);
 
 	char *sStr = "1111111100111000";
 	unsigned short bUShort = bs2ui(sStr);
 	assert(bUShort == 65336);
-	printf("%s == 65336\n", sStr, bUShort);
+	printf("%s == %d\n", sStr, bUShort);
 	
 	short bShort = bs2i(sStr);
 	assert(bShort == -200);
-	printf("%s == -200\n", sStr, bShort);
+	printf("%s == %d\n", sStr, bShort);
 
 	char *iStr = "11111111111111111111111100111000";
-	int bInt = bs2i(iStr);
-	printf("%s == -200\n", iStr, bInt);
-	assert(bInt==-200);
+	unsigned int bUInt = bs2ui(iStr);
+	assert(bUInt == 4294967096);
+	printf("%s == %u\n", iStr, bUInt);
 
-	char *lStr = "1111111111111111111111111111111111111111111111111111111111111111";
-	unsigned long long bULong = bs2ui(cStr);
+	int bInt = bs2i(iStr);
+	assert(bInt == -200);
+	printf("%s == %d\n", iStr, bInt);
+
+	char *lStr = "11111111111101111111111111111111111111111111111111111111111111";
+	unsigned long long bULong = bs2ui(lStr);
 	printf("%llu\n", bULong);
 
-	long long bLong = bs2i(cStr);
+	long long bLong = bs2i(lStr);
 	printf("%lli\n", bLong);
 
 	char *fStr = "11000001010001001100110011001101";

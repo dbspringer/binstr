@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <limits.h>
 #include <stdio.h>
 #include <string.h>
 #include "binstr.h"
@@ -11,8 +12,7 @@
  * stop at first 0 ('\0') value
  **/
 void str2bs(const char *str, size_t strLen, char *bitStr) {
-	size_t i;
-	while (strLen--) {
+	while(strLen--) {
 		bitStr[0] = (*str & 0x80) ? '1': '0';
 		bitStr[1] = (*str & 0x40) ? '1': '0';
 		bitStr[2] = (*str & 0x20) ? '1': '0';
@@ -28,32 +28,37 @@ void str2bs(const char *str, size_t strLen, char *bitStr) {
 	*bitStr = 0;
 }
 
+/* Convert binary string to unsigned value */
 unsigned long long bs2ui(char *bitStr) {
-	assert(strlen(bitStr) <= (8*sizeof(long long)));
-
 	unsigned long long val = 0;
-	while (*bitStr) {
+	while(*bitStr) {
 		val = (val << 1) | (*bitStr & 1);
 		bitStr++;
 	}
- 
+
 	return val;
 }
 
+/* Convert binary string to signed value, with MSB as sign bit */
 long long bs2i(char *bitStr) {
 	long long val = 0l;
-	int len = (((strlen(bitStr)-1)/8)+1)*8;
-	int msb = bitStr[0] == '1' ? 1 : 0;
+
+	size_t len = strlen(bitStr);
+	char size = CHAR_BIT;
+	while(len > size) size <<= 1;
+
+	char msb = *bitStr & 1;
 	bitStr++;
-	while (*bitStr) {
-		val = (val << 1) | (*bitStr & 1);
+	while(*bitStr) {
+		val = (val << 1l) | (*bitStr & 1);
 		bitStr++;
 	}
-	val = (msb << len-1) | val; /* Use MSB as sign bit */
+	val = ((long long)msb << size-1l) | val; /* Use MSB as sign bit */
 
 	return val;
 }
 
+/* Convert binary string to float, string must be length 8*sizeof(float) */
 float bs2f(char *bitStr) {
 	assert(strlen(bitStr) == (8*sizeof(float)));
 
@@ -67,6 +72,7 @@ float bs2f(char *bitStr) {
 	return val;
 }
 
+/* Convert binary string to double, string must be length 8*sizeof(double) */
 double bs2d(char *bitStr) {
 	assert(strlen(bitStr) == (8*sizeof(double)));
 
