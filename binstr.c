@@ -53,7 +53,7 @@ long long bs2i(char *bitStr) {
 		val = (val << 1l) | (*bitStr & 1);
 		bitStr++;
 	}
-	val = ((long long)msb << size-1l) | val; /* Use MSB as sign bit */
+	val = ((long long)msb << (size-1l)) | val; /* Use MSB as sign bit */
 
 	return val;
 }
